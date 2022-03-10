@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace SudokuSATSolver
@@ -11,73 +9,30 @@ namespace SudokuSATSolver
 
         static void Main(string[] args)
         {
-            int taille; //= 6;
-            bool boitesLongues;// = false;
-            int[,] grid; /*= new int[9, 9] {
-                {1,2,3,4,5,6,7,8,9},
-                {1,2,3,4,5,6,7,8,9},
-                {1,2,3,4,5,6,7,8,9},
-                {1,2,3,4,5,6,7,8,9},
-                {1,2,3,4,5,6,7,8,9},
-                {1,2,3,4,5,6,7,8,9},
-                {1,2,3,4,5,6,7,8,9},
-                {1,2,3,4,5,6,7,8,9},
-                {1,2,3,4,5,6,7,8,9}
-            };
-            new int[4, 4]
-            {
-                {0,2,0,4 },
-                {3,0,1,0 },
-                {2,1,0,3 },
-                {4,0,2,1 }
-            };
-            new int[6, 6]
-            {
-                {1,2,3,4,5,6 },
-                {1,2,3,4,5,6 },
-                {1,2,3,4,5,6 },
-                {1,2,3,4,5,6 },
-                {1,2,3,4,5,6 },
-                {1,2,3,4,5,6 }
-            };*/
             GrilleSudoku gs;
             SolveurSAT s;
             do
             {
                 int sizeChoice = SetGridSize();
-                if (sizeChoice % 2 == 0) boitesLongues = true;
-                else boitesLongues = false;
-                switch (sizeChoice)
-                {
-                    case 1:
-                        taille = 4;
-                        break;
-                    case 2:
-                    case 3:
-                        taille = 6;
-                        break;
-                    case 4:
-                    case 5:
-                        taille = 8;
-                        break;
-                    case 6:
-                        taille = 9;
-                        break;
-                    default: throw new ArgumentException();
-                }
+                gs = new GrilleSudoku(sizeChoice);
+
                 Console.Clear();
-                grid = SetLines(taille);
-                gs = new GrilleSudoku(taille, grid, boitesLongues);
+                SetLines(gs);
                 s = new SolveurSAT(gs);
+                //Console.Clear();
                 //Demander Confirmation
-                Console.Clear();
+
                 Console.WriteLine("Vous avez soumis :");
                 Console.WriteLine(gs.ShowGrid());
                 Console.WriteLine("Est-ce ce que vous voulez ? Tapez 'y' pour continuer.");
             }
             while (!Console.ReadLine().Equals("y", StringComparison.InvariantCultureIgnoreCase));
             Console.WriteLine("Recherche de solution en cours. Cela peut prendre du temps...");
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             gs.Contenu = s.Solve();
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
             Console.WriteLine("Voici la solution :");
             if (gs.Contenu == null) Console.WriteLine("Pas de réponse!!!");
             else Console.WriteLine(gs.ShowGrid());
@@ -105,25 +60,21 @@ namespace SudokuSATSolver
             while (true);
          }
 
-        public static int[,] SetLines(int taille)
+        public static void SetLines(GrilleSudoku gs)
         {
-            int[,] grid = new int[taille, taille];
             int i = 0;
-            string pattern = @"^(\s*[0-" + taille + "]){" + taille + @"}\s*$";
-            while (i < taille)
+            string pattern = @"^(\s*[0-" + gs.Taille + "]){" + gs.Taille + @"}\s*$";
+            while (i < gs.Taille)
             {
                 Console.Clear();
-                Console.WriteLine("Insérez vos {0} nombres. ({1}/{2})", taille, i, taille);
+                Console.WriteLine("Insérez vos {0} nombres. ({1}/{2})", gs.Taille, i, gs.Taille);
                 string input = Console.ReadLine();
-                if (Regex.IsMatch(input, pattern))
+                if (gs.ParseLine(input, i))
                 {
-                    char[] numbers = input.Replace(" ", String.Empty).ToCharArray();
-                    for (int j = 0; j < taille; j++) grid[i, j] = int.Parse(numbers[j].ToString());
                     i++;
                 }
                 else Console.WriteLine("erreur");
             }
-            return grid;
         }
     }
 }
