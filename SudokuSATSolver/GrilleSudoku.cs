@@ -49,7 +49,7 @@ namespace SudokuSATSolver
             {
                 for (int j = 0; j < taille; j++)
                 {
-                    sb.Append(contenu[i, j] + " ");
+                    sb.Append(contenu[i,j]==0?"_ ":contenu[i, j] + " ");
                     if ((j + 1) % primeFactors[0] == 0 && j + 1 != taille) sb.Append("| ");
                 }
                 sb.AppendLine("");

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace SudokuSATSolver
 {
@@ -32,7 +31,7 @@ namespace SudokuSATSolver
             sw.Start();
             gs.Contenu = s.Solve();
             sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds);
+            Console.WriteLine("Trouvé en {0} secondes",(float)sw.ElapsedMilliseconds/1000);
             Console.WriteLine("Voici la solution :");
             if (gs.Contenu == null) Console.WriteLine("Pas de réponse!!!");
             else Console.WriteLine(gs.ShowGrid());
@@ -66,8 +65,7 @@ namespace SudokuSATSolver
             string pattern = @"^(\s*[0-" + gs.Taille + "]){" + gs.Taille + @"}\s*$";
             while (i < gs.Taille)
             {
-                Console.Clear();
-                Console.WriteLine("Insérez vos {0} nombres. ({1}/{2})", gs.Taille, i, gs.Taille);
+                Console.WriteLine("Insérez vos {0} nombres. (ligne {1}/{2})", gs.Taille, i+1, gs.Taille);
                 string input = Console.ReadLine();
                 if (gs.ParseLine(input, i))
                 {

@@ -13,7 +13,7 @@ namespace SudokuSATSolver
         {
             formules = new List<List<int>>();
             variables = new BoolTernaire[(int)Math.Pow(gs.Taille,3)];
-            //1
+            //1 Indices
             for (int i = 0; i < gs.Taille; i++)
             {
                 for (int j = 0; j < gs.Taille; j++)
@@ -25,6 +25,7 @@ namespace SudokuSATSolver
                         {
                             tmp.Add(i * gs.Taille + j + k * gs.Taille * gs.Taille + 1);
                             formules.Add(tmp);
+                            formules.AddRange(GetBadValues(i, j, gs.Contenu[i, j], gs));
                         }
                         else if(gs.Contenu[i,j] != 0)
                         {
@@ -34,7 +35,7 @@ namespace SudokuSATSolver
                     }
                 }
             }
-            //2
+            //2 Au moins un chiffre par case
             for (int i = 0; i < gs.Taille; i++)
             {
                 for (int j = 0; j < gs.Taille; j++)
@@ -47,7 +48,7 @@ namespace SudokuSATSolver
                     formules.Add(tmp);
                 }
             }
-            //3
+            //3 Au plus un chiffre par case
             for (int i = 0; i < gs.Taille; i++)
             {
                 for (int j = 0; j < gs.Taille; j++)
@@ -64,7 +65,7 @@ namespace SudokuSATSolver
                     }
                 }
             }
-            //4
+            //4 Chaque chiffre par colonne
             for (int k = 0; k < gs.Taille; k++)
             {
                 for (int j = 0; j < gs.Taille; j++)
@@ -73,11 +74,18 @@ namespace SudokuSATSolver
                     for (int i = 0; i < gs.Taille; i++)
                     {
                         tmp.Add(i * gs.Taille + j + k * gs.Taille * gs.Taille + 1);
+                        for(int ni = i + 1; ni < gs.Taille; ni++)
+                        {
+                            List<int> ntmp = new List<int>();
+                            ntmp.Add(-(i * gs.Taille + j + k * gs.Taille * gs.Taille + 1));
+                            ntmp.Add(-(ni * gs.Taille + j + k * gs.Taille * gs.Taille + 1));
+                            formules.Add(ntmp);
+                        }
                     }
                     formules.Add(tmp);
                 }
             }
-            //5
+            //5 Chaque chiffre par ligne
             for (int k = 0; k < gs.Taille; k++)
             {
                 for (int i = 0; i < gs.Taille; i++)
@@ -86,11 +94,18 @@ namespace SudokuSATSolver
                     for (int j = 0; j < gs.Taille; j++)
                     {
                         tmp.Add(i * gs.Taille + j + k * gs.Taille * gs.Taille + 1);
+                        for (int nj = j + 1; nj < gs.Taille; nj++)
+                        {
+                            List<int> ntmp = new List<int>();
+                            ntmp.Add(-(i * gs.Taille + j + k * gs.Taille * gs.Taille + 1));
+                            ntmp.Add(-(i * gs.Taille + nj + k * gs.Taille * gs.Taille + 1));
+                            formules.Add(ntmp);
+                        }
                     }
                     formules.Add(tmp);
                 }
             }
-            //6
+            //6 Chaque chiffre par bloc
             for (int k = 0; k < gs.Taille; k++)
             {
                 for (int iBlock = 0; iBlock < gs.Taille; iBlock += gs.PrimeFactors[1])
@@ -147,6 +162,23 @@ namespace SudokuSATSolver
                 return input;       
             BoolTernaire[] res = SolveNode(varAChanger+1, !valAChanger, input);
             if (res == null) return SolveNode(varAChanger+1, valAChanger, input);
+            return res;
+        }
+
+        private List<List<int>> GetBadValues(int i,int j, int val, GrilleSudoku gs)
+        {
+            List<List<int>> res = new List<List<int>>();
+            for(int railI = 0; railI < gs.Taille; railI++)
+            {
+                for (int railJ = 0; railJ< gs.Taille; railJ++)
+                {
+                    if ((railI == i && railJ != j) || (railI!=i && railJ==j)) {
+                        List<int> tmp = new List<int>();
+                        tmp.Add(-(railI * gs.Taille + railJ + (val - 1) * gs.Taille * gs.Taille + 1));
+                        res.Add(tmp);
+                    }
+                }
+            }
             return res;
         }
     }
