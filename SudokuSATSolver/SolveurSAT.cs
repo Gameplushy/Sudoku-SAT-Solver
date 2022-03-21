@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SudokuSATSolver
 {
-    class SolveurSAT
+    public class SolveurSAT
     {
         private List<List<int>> formules;
         private readonly BoolTernaire[] variables;

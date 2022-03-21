@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SudokuSATSolver
 {
-    class GrilleSudoku
+    public class GrilleSudoku
     {
         private int taille;
         private int[,] contenu;
@@ -66,7 +66,7 @@ namespace SudokuSATSolver
             return sb.ToString();
         }
 
-        public int[] PrimeFactorsOf(int i)
+        private int[] PrimeFactorsOf(int i)
         {
             int[] factors;
             switch (i)

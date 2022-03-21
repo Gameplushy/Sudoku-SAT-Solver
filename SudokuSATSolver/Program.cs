@@ -8,8 +8,7 @@ namespace SudokuSATSolver
 
         static void Main(string[] args)
         {
-            GrilleSudoku gs;
-            SolveurSAT s;
+            GrilleSudoku gs;        
             do
             {
                 int sizeChoice = SetGridSize();
@@ -17,15 +16,15 @@ namespace SudokuSATSolver
 
                 Console.Clear();
                 SetLines(gs);
-                s = new SolveurSAT(gs);
+                
                 //Console.Clear();
                 //Demander Confirmation
-
                 Console.WriteLine("Vous avez soumis :");
                 Console.WriteLine(gs.ShowGrid());
                 Console.WriteLine("Est-ce ce que vous voulez ? Tapez 'y' pour continuer.");
             }
             while (!Console.ReadLine().Equals("y", StringComparison.InvariantCultureIgnoreCase));
+            SolveurSAT s = new SolveurSAT(gs);
             Console.WriteLine("Recherche de solution en cours. Cela peut prendre du temps...");
             Stopwatch sw = new Stopwatch();
             sw.Start();
