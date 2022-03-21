@@ -50,15 +50,15 @@ namespace SudokuSATSolver
                 for (int j = 0; j < taille; j++)
                 {
                     sb.Append(contenu[i,j]==0?"_ ":contenu[i, j] + " ");
-                    if ((j + 1) % primeFactors[0] == 0 && j + 1 != taille) sb.Append("| ");
+                    if ((j + 1) % primeFactors[0] == 0 && j + 1 != taille) sb.Append("│ ");
                 }
                 sb.AppendLine("");
                 if ((i + 1) % primeFactors[1] == 0 && i + 1 != taille)
                 {
                     for (int k = 0; k < taille; k++)
                     {
-                        sb.Append("--");
-                        if ((k + 1) % primeFactors[0] == 0 && k + 1 != taille) sb.Append("+-");
+                        sb.Append("──");
+                        if ((k + 1) % primeFactors[0] == 0 && k + 1 != taille) sb.Append("┼─");
                     }
                     sb.AppendLine("");
                 }
