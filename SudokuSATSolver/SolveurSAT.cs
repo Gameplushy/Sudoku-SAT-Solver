@@ -126,6 +126,17 @@ namespace SudokuSATSolver
                 }
             }
             foreach (List<int> l in formules) Console.WriteLine(String.Join(' ', l.ToArray()) + " 0");
+            Console.WriteLine(formules.Count);
+        }
+        private int[,] TranslateToGrid(BoolTernaire[] bt)
+        {
+            int size = (int)Math.Cbrt(bt.Length);
+            int[,] newGrid = new int[size, size];
+            for (int i = 0; i < bt.Length; i++)
+            {
+                if (bt[i] == BoolTernaire.True) newGrid[(i / size) % size, i % size] = (i / (int)Math.Pow(size, 2)) + 1;
+            }
+            return newGrid;
         }
 
         public int[,] Solve()
@@ -135,31 +146,18 @@ namespace SudokuSATSolver
             return res == null ? null : TranslateToGrid(res);
         }
 
-        private int[,] TranslateToGrid(BoolTernaire[] bt)
-        {
-            int size = (int)Math.Cbrt(bt.Length);
-            int[,] newGrid = new int[size,size];
-            for (int i = 0; i < bt.Length; i++)
-            {
-                if (bt[i] == BoolTernaire.True) newGrid[(i / size) % size, i % size] = (i / (int)Math.Pow(size, 2)) + 1; 
-            }
-            return newGrid;
-        }
-
         private BoolTernaire[] SolveNode(int varAChanger, bool valAChanger, BoolTernaire[] listeVariables)
         {
             //Console.WriteLine("-{0} {1}", varAChanger, valAChanger);
             BoolTernaire[] input = new BoolTernaire[listeVariables.Length]; 
             Array.Copy(listeVariables, input, listeVariables.Length);
             input[varAChanger] = valAChanger?BoolTernaire.True:BoolTernaire.False;
+            //Si une des clause n'est pas respectée
             if (formules.Any(f => f.All(x => input[Math.Abs(x) - 1] != BoolTernaire.Unknown && (input[Math.Abs(x) - 1] == BoolTernaire.False && x > 0 || input[Math.Abs(x) - 1] == BoolTernaire.True && x < 0))))
-            {
-                //Console.WriteLine("{0} {1} ECHEC",varAChanger,valAChanger);
                 return null;
-            }
-
+            //Si toutes les variables ont une valeur
             if (varAChanger + 1 == input.Length)
-                return input;       
+                return input;
             BoolTernaire[] res = SolveNode(varAChanger+1, !valAChanger, input);
             if (res == null) return SolveNode(varAChanger+1, valAChanger, input);
             return res;

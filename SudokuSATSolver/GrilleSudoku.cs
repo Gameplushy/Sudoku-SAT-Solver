@@ -47,12 +47,14 @@ namespace SudokuSATSolver
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < taille; i++)
             {
+                //Ligne de chiffres
                 for (int j = 0; j < taille; j++)
                 {
                     sb.Append(contenu[i,j]==0?"_ ":contenu[i, j] + " ");
                     if ((j + 1) % primeFactors[0] == 0 && j + 1 != taille) sb.Append("│ ");
                 }
                 sb.AppendLine("");
+                //Ligne séparatrice
                 if ((i + 1) % primeFactors[1] == 0 && i + 1 != taille)
                 {
                     for (int k = 0; k < taille; k++)
@@ -92,6 +94,7 @@ namespace SudokuSATSolver
 
         public bool ParseLine(string line,int lineNumber)
         {
+            //Chiffres séparés par au moins un espace
             string pattern = @"^(\s*[0-" + taille + "]){" + taille + @"}\s*$";
             if (Regex.IsMatch(line, pattern))
             {

@@ -61,16 +61,13 @@ namespace SudokuSATSolver
         public static void SetLines(GrilleSudoku gs)
         {
             int i = 0;
-            string pattern = @"^(\s*[0-" + gs.Taille + "]){" + gs.Taille + @"}\s*$";
             while (i < gs.Taille)
             {
                 Console.WriteLine("Insérez vos {0} nombres. (ligne {1}/{2})", gs.Taille, i+1, gs.Taille);
                 string input = Console.ReadLine();
                 if (gs.ParseLine(input, i))
-                {
-                    i++;
-                }
-                else Console.WriteLine("erreur");
+                    i++;        
+                else Console.WriteLine("Veuillez réessayer.");
             }
         }
     }
