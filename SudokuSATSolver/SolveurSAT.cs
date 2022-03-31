@@ -125,8 +125,8 @@ namespace SudokuSATSolver
                     }
                 }
             }
-            foreach (List<int> l in formules) Console.WriteLine(String.Join(' ', l.ToArray()) + " 0");
-            Console.WriteLine(formules.Count);
+            //foreach (List<int> l in formules) Console.WriteLine(String.Join(' ', l.ToArray()) + " 0");
+            //Console.WriteLine(formules.Count);
         }
         private int[,] TranslateToGrid(BoolTernaire[] bt)
         {
