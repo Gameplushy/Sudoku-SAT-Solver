@@ -15,9 +15,8 @@ namespace SudokuSATSolver
                 gs = new GrilleSudoku(sizeChoice);
 
                 Console.Clear();
-                SetLines(gs);
-                
-                //Console.Clear();
+                SetLines(gs);    
+                Console.Clear();
                 //Demander Confirmation
                 Console.WriteLine("Vous avez soumis :");
                 Console.WriteLine(gs.ShowGrid());

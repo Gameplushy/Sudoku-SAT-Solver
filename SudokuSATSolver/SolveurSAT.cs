@@ -42,9 +42,7 @@ namespace SudokuSATSolver
                 {
                     List<int> tmp = new List<int>();
                     for (int k = 0; k < gs.Taille; k++)
-                    {
                         tmp.Add(i * gs.Taille + j + k * gs.Taille * gs.Taille + 1);
-                    }
                     formules.Add(tmp);
                 }
             }
@@ -114,13 +112,8 @@ namespace SudokuSATSolver
                     {
                         List<int> tmp = new List<int>();
                         for (int i = iBlock; i < iBlock + gs.PrimeFactors[1]; i++)
-                        {
                             for (int j = jBlock; j < jBlock + gs.PrimeFactors[0]; j++)
-                            {
                                 tmp.Add(i * gs.Taille + j + k * gs.Taille * gs.Taille + 1);
-                            }
-
-                        }
                         formules.Add(tmp);
                     }
                 }
@@ -133,9 +126,8 @@ namespace SudokuSATSolver
             int size = (int)Math.Cbrt(bt.Length);
             int[,] newGrid = new int[size, size];
             for (int i = 0; i < bt.Length; i++)
-            {
-                if (bt[i] == BoolTernaire.True) newGrid[(i / size) % size, i % size] = (i / (int)Math.Pow(size, 2)) + 1;
-            }
+                if (bt[i] == BoolTernaire.True)
+                    newGrid[(i / size) % size, i % size] = (i / (int)Math.Pow(size, 2)) + 1;    
             return newGrid;
         }
 
@@ -148,7 +140,6 @@ namespace SudokuSATSolver
 
         private BoolTernaire[] SolveNode(int varAChanger, bool valAChanger, BoolTernaire[] listeVariables)
         {
-            //Console.WriteLine("-{0} {1}", varAChanger, valAChanger);
             BoolTernaire[] input = new BoolTernaire[listeVariables.Length]; 
             Array.Copy(listeVariables, input, listeVariables.Length);
             input[varAChanger] = valAChanger?BoolTernaire.True:BoolTernaire.False;
